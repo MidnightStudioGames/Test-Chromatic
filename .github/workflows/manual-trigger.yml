@@ -32,7 +32,7 @@ jobs:
               "state": "success",
               "target_url": "https://github.com/$OWNER/$REPO/actions/runs/${{ github.run_id }}",
               "description": "Manual Trigger executed successfully",
-              "context": "Manual Trigger"
+              "context": "build"
             }'
 
       - name: Mark as success
