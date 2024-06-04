@@ -14,3 +14,5 @@ jobs:
 
       - name: Run a sample script
         run: echo "Manual Trigger executed!"
+      - name: Mark as success
+        run: exit 0
