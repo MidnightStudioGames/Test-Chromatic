@@ -15,6 +15,9 @@ jobs:
       - name: Run a sample script
         run: echo "Manual Trigger executed!"
 
+      - name: Mark as success
+        run: exit 1
+
       - name: Update PR status
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -35,5 +38,4 @@ jobs:
               "context": "Manual Trigger"
             }'
 
-      - name: Mark as success
-        run: exit 0
+
