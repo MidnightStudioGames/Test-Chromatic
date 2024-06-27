@@ -27,8 +27,6 @@ jobs:
         uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          onlyChanged: true
-          exitZeroOnChanges: true
 
       # - name: Update PR status
       #   env:
