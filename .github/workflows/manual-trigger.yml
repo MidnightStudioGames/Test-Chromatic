@@ -1,27 +1,32 @@
-
-
-name: Manual Trigger
+name: 'Chromatic'
 
 on:
+  merge_group:
+    types: [checks_requested]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  build:
+  Chromatic:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Run a sample script
-        run: echo "Manual Trigger executed!"
+      - name: Install dependencies
+        run: pnpm install
 
-      - name: Mark as success
-        run: exit 1
+      - name: Publish to Chromatic
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          onlyChanged: true
 
       - name: Update PR status
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-          OWNER: KsavinN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ksavinN
           REPO: Test-Chromium
           SHA: ${{ github.sha }}
         run: |
@@ -34,8 +39,9 @@ jobs:
             -d '{
               "state": "success",
               "target_url": "https://github.com/$OWNER/$REPO/actions/runs/${{ github.run_id }}",
-              "description": "Manual Trigger executed successfully",
-              "context": "Manual Trigger"
+              "description": "Chromatic deployment succeeded",
+              "context": "Chromatic"
             }'
 
-
+      - name: Mark as success
+        run: exit 0
