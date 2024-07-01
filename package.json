@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "test-storybook": "test-storybook",
     "chromatic": "source .env && chromatic --project-token=$CHROMATIC_TOKEN"
   },
   "dependencies": {
@@ -17,8 +18,12 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.45.0",
     "@storybook/react": "^8.1.10",
     "@storybook/react-vite": "^8.1.10",
+    "@storybook/test": "8.1.6",
+    "@storybook/test-runner": "0.18.2",
+    "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
