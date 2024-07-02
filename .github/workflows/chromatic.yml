@@ -26,10 +26,6 @@ jobs:
             echo "changes=false" >> $GITHUB_ENV
           fi
 
-      - name: Skip job if no changes in components folder
-        if: env.changes == 'false'
-        run: exit 0
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
 
@@ -40,6 +36,7 @@ jobs:
         run: pnpm install
 
       - name: Publish to Chromatic
+        if: env.changes == 'true'
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
