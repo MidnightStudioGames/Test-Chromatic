@@ -3,8 +3,7 @@
 name: 'Chromatic'
 
 on:
-  merge_group:
-    types: [checks_requested]
+  merge_group
 
 jobs:
   Chromatic:
