@@ -7,6 +7,6 @@ type ButtonProps = {
 
 export const Button = ({ children, onClick }: ButtonProps) => {
   return (
-    <button style={{ color: 'green'  }} onClick={onClick}>{children}</button>
+    <button style={{ color: 'red'  }} onClick={onClick}>{children}</button>
   );
 }
