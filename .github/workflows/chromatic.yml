@@ -27,3 +27,5 @@ jobs:
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+      - name: Force Failure
+        run: exit 1
