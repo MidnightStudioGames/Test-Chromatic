@@ -22,9 +22,9 @@ jobs:
           CHANGED_FILES=$(git diff --name-only origin/main HEAD)
           echo "Changed files: $CHANGED_FILES"
           if echo "$CHANGED_FILES" | grep -q '^src/components/.*\.tsx$'; then
-            echo "::set-output name=changes::true"
+            echo "changes=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=changes::false"
+            echo "changes=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup Node.js
