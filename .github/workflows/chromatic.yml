@@ -1,8 +1,6 @@
 name: 'Chromatic'
 
 on:
-  merge_group:
-    types: [checks_requested]
   pull_request:
   merge_group:
     types: [checks_requested]
