@@ -4,8 +4,9 @@ name: 'Chromatic'
 
 on:
   pull_request:
-    branches:
-      - main
+  merge_group:
+    types: [checks_requested]
+    branches: [main]
 
 jobs:
   Chromatic:
@@ -36,8 +37,8 @@ jobs:
         run: pnpm install
 
       - name: Publish to Chromatic
-        if: env.changes == 'true'
+        if: steps.check_changes.outputs.changes == 'true'
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-
+          skip: ${{ github.event_name == 'pull_request' }}
