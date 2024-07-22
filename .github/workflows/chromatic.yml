@@ -1,8 +1,6 @@
 name: 'Chromatic'
 
 on:
-  merge_group:
-    types: [checks_requested]
   pull_request:
   merge_group:
     types: [checks_requested]
@@ -40,8 +38,7 @@ jobs:
         run: pnpm install
 
       - name: Publish to Chromatic
-        if: steps.check_changes.outputs.changes == 'true'
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          skip: ${{ github.event_name == 'pull_request' }}
+          skip: ${{ github.event_name == 'merge_group' }}
