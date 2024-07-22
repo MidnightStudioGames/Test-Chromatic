@@ -41,4 +41,4 @@ jobs:
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          skip: ${{ github.event_name == 'pull_request' || steps.check_changes.outputs.changes == 'true' }}
+          skip: ${{ github.event_name == 'merge_group' }}
