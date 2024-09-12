@@ -2,6 +2,8 @@ name: 'Chromatic'
 
 on:
   pull_request:
+  issue_comment:
+    types: [created, edited]
   merge_group:
     types: [checks_requested]
     branches: [main]
@@ -9,6 +11,7 @@ on:
 jobs:
   Chromatic:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || (github.event.issue.pull_request  && contains(github.event.comment.body, '/chromatic')) || github.event_name == 'merge_group'
     steps:
       - uses: actions/checkout@v4
         with:
