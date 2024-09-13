@@ -28,6 +28,13 @@ jobs:
           ref: ${{ steps.getRef.outputs.pr_ref }}
       - name: Fetch all branches
         run: git fetch --all
+      
+      - name: Get last commit hash of specific branch
+        run: |
+          git fetch origin ${{ steps.getRef.outputs.pr_ref }}
+          LAST_COMMIT_HASH=$(git rev-parse origin/${{ steps.getRef.outputs.pr_ref }})
+          echo "Last commit hash of branch '${{ steps.getRef.outputs.pr_ref }}' is $LAST_COMMIT_HASH"
+          echo "LAST_COMMIT_HASH=$LAST_COMMIT_HASH" >> $GITHUB_ENV  # Save the hash to the environment for later steps
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -51,14 +58,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           OWNER: MidnightStudioGames
           REPO: Test-Chromatic
-          SHA: ${{ github.sha }}  
         run: |
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/$OWNER/$REPO/statuses/$SHA \
+            https://api.github.com/repos/$OWNER/$REPO/statuses/$LAST_COMMIT_HASH \
             -d '{
               "state": "success",
               "target_url": "https://github.com/$OWNER/$REPO/actions/runs/${{ github.run_id }}",
