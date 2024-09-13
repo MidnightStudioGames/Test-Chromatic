@@ -53,6 +53,7 @@ jobs:
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          branchName: 'blue'
           skip: ${{ github.event_name == 'merge_group' }}
 
       # Use the correct SHA for the PR or other events
