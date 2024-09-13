@@ -14,30 +14,30 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || (github.event.issue.pull_request && contains(github.event.comment.body, '/chromatic')) || github.event_name == 'merge_group'
     steps:
-      - name: Get PR HEAD Ref
-        id: getRef
+      - name: Get PR HEAD Commit Hash
+        id: getCommitHash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.issue.number }}
-        run: echo "pr_ref=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        run: echo "pr_commit_hash=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefOid | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
       
-      - name: Fetch all branches
-        run: git fetch --all
+
         
-      - name: Get last commit hash of specific branch
-        run: |
-          git fetch origin ${{ steps.getRef.outputs.pr_ref }}
-          LAST_COMMIT_HASH=$(git rev-parse origin/${{ steps.getRef.outputs.pr_ref }})
-          echo "Last commit hash of branch '${{ steps.getRef.outputs.pr_ref }}'
-          echo "LAST_COMMIT_HASH=$LAST_COMMIT_HASH" >> $GITHUB_ENV  
+      # - name: Get last commit hash of specific branch
+      #   run: |
+      #     git fetch origin ${{ steps.getRef.outputs.pr_ref }}
+      #     LAST_COMMIT_HASH=$(git rev-parse origin/${{ steps.getRef.outputs.pr_ref }})
+      #     echo "Last commit hash of branch '${{ steps.getRef.outputs.pr_ref }}'
+      #     echo "LAST_COMMIT_HASH=$LAST_COMMIT_HASH" >> $GITHUB_ENV  
 
       - name: Checkout code from PR or default branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ env.LAST_COMMIT_HASH }}
+          ref: ${{ steps.getCommitHash.outputs.pr_commit_hash }}
 
-      
+      - name: Fetch all branches
+        run: git fetch --all
 
 
       - name: Setup Node.js
@@ -62,6 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           OWNER: MidnightStudioGames
           REPO: Test-Chromatic
+          LAST_COMMIT_HASH: ${{ steps.getCommitHash.outputs.pr_commit_hash }}
         run: |
           curl -L \
             -X POST \
