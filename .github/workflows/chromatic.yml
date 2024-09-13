@@ -20,7 +20,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.issue.number }}
         run: echo "pr_ref=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
-
+      
+      - name: Fetch all branches
+        run: git fetch --all
+        
       - name: Get last commit hash of specific branch
         run: |
           git fetch origin ${{ steps.getRef.outputs.pr_ref }}
@@ -33,8 +36,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ env.LAST_COMMIT_HASH }}
-      - name: Fetch all branches
-        run: git fetch --all
+
       
 
 
