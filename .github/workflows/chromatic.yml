@@ -20,8 +20,14 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.sha }}  # Checkout the PR's last commit if available, else use the default
-      - name: Show base ref
-        run: echo " Base ref of the PR ${{ github.event.pull_request.base.ref }}"
+      - name: Get PR HEAD Ref
+        id: getRef
+        run: echo "pr_ref=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            PR_NUMBER: ${{ github.event.issue.number }}
+      - name: Echo Pr Ref
+        run: echo ${{ steps.getRef.outputs.pr_ref }}
 
       - name: Fetch all branches
         run: git fetch --all
