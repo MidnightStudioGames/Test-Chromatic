@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           OWNER: MidnightStudioGames
           REPO: Test-Chromatic
-          SHA: ${{ github.event.pull_request.head.sha || github.sha }}  # Use PR's head SHA if available, else default to `github.sha`
+          SHA: ${{ github.sha }}  
         run: |
           curl -L \
             -X POST \
