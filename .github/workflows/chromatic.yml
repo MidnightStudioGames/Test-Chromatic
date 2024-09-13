@@ -20,12 +20,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.issue.number }}
         run: echo "pr_ref=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefName | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+
       - name: Get last commit hash of specific branch
         run: |
           git fetch origin ${{ steps.getRef.outputs.pr_ref }}
           LAST_COMMIT_HASH=$(git rev-parse origin/${{ steps.getRef.outputs.pr_ref }})
-          echo "Last commit hash of branch '${{ steps.getRef.outputs.pr_ref }}' is $LAST_COMMIT_HASH"
-          echo "LAST_COMMIT_HASH=$LAST_COMMIT_HASH" >> $GITHUB_ENV  # Save the hash to the environment for later steps
+          echo "Last commit hash of branch '${{ steps.getRef.outputs.pr_ref }}'
+          echo "LAST_COMMIT_HASH=$LAST_COMMIT_HASH" >> $GITHUB_ENV  
 
       - name: Checkout code from PR or default branch
         uses: actions/checkout@v4
