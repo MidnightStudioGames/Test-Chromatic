@@ -20,6 +20,10 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha || github.sha }}  # Checkout the PR's last commit if available, else use the default
+      - name: Show base ref
+        env: 
+          PULL_REQUEST_BASE_REF: ${{github.event.pull_request.base.ref}}
+        run: echo "$PULL_REQUEST_BASE_REF"
 
       - name: Fetch all branches
         run: git fetch --all
