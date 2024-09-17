@@ -21,15 +21,6 @@ jobs:
           PR_NUMBER: ${{ github.event.issue.number }}
         run: echo "pr_commit_hash=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefOid | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
       
-
-        
-      # - name: Get last commit hash of specific branch
-      #   run: |
-      #     git fetch origin ${{ steps.getRef.outputs.pr_ref }}
-      #     LAST_COMMIT_HASH=$(git rev-parse origin/${{ steps.getRef.outputs.pr_ref }})
-      #     echo "Last commit hash of branch '${{ steps.getRef.outputs.pr_ref }}'
-      #     echo "LAST_COMMIT_HASH=$LAST_COMMIT_HASH" >> $GITHUB_ENV  
-
       - name: Checkout code from PR or default branch
         uses: actions/checkout@v4
         with:
@@ -39,6 +30,8 @@ jobs:
       - name: Fetch all branches
         run: git fetch --all
 
+      - name: Checkout specific commit
+        run: git checkout ${{ steps.getCommitHash.outputs.pr_commit_hash }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -53,7 +46,6 @@ jobs:
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          branchName: 'blue'
           skip: ${{ github.event_name == 'merge_group' }}
 
       # Use the correct SHA for the PR or other events
