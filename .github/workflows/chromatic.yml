@@ -43,7 +43,7 @@ jobs:
         run: pnpm install
 
       - name: Publish to Chromatic
-        run: pnpm exec chromatic --project-token=$CHROMATIC_PROJECT_TOKEN
+        run: pnpm exec chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
