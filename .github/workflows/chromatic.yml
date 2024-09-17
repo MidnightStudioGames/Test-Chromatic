@@ -43,10 +43,9 @@ jobs:
         run: pnpm install
 
       - name: Publish to Chromatic
-        uses: chromaui/action@latest
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          skip: ${{ github.event_name == 'merge_group' }}
+        run: pnpm chromatic --project-token=$CHROMATIC_PROJECT_TOKEN
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
       # Use the correct SHA for the PR or other events
       - name: Update PR status
