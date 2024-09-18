@@ -30,6 +30,9 @@ jobs:
       - name: Fetch all branches
         run: git fetch --all
 
+      - name: Show current commit
+        run: git log -1
+
       - name: Checkout specific commit
         run: git checkout ${{ steps.getCommitHash.outputs.pr_commit_hash }}
 
