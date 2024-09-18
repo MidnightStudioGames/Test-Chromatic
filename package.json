@@ -11,8 +11,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "chromatic": "source .env && chromatic --project-token=$CHROMATIC_TOKEN",
-    "chromatic": "chromatic --project-token=$CHROMATIC_TOKEN"
+    "chromatic": "source .env && chromatic --project-token=$CHROMATIC_TOKEN"
   },
   "dependencies": {
     "react": "^18.3.1",
