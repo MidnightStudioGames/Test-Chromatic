@@ -2,8 +2,6 @@ name: 'Chromatic'
 
 on:
   workflow_dispatch:
-  issue_comment:
-    types: [created, edited]
   merge_group:
     types: [checks_requested]
     branches: [main]
@@ -12,15 +10,7 @@ jobs:
   Chromatic:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || (github.event.issue.pull_request && contains(github.event.comment.body, '/chromatic')) || github.event_name == 'merge_group'
-    steps:
-      - name: Get PR HEAD Commit Hash
-        id: getCommitHash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.issue.number }}
-        run: echo "pr_commit_hash=$(gh pr view $PR_NUMBER --repo ${{ github.repository }} --json headRefOid | jq -r '.headRefOid')" >> $GITHUB_OUTPUT
-      
+    steps: 
       - name: Checkout code from PR or default branch
         uses: actions/checkout@v4
         with:
