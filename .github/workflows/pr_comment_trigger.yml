@@ -1,0 +1,35 @@
+name: Trigger on PR Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  pull-requests: read
+  contents: read
+
+env:
+  ISSUE_NUMBER: ${{ github.event.issue.number }}
+
+jobs:
+  check-comment:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/chromatic') }}
+    steps:
+      - name: Trigger Chromatic Action
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: process.env.ISSUE_NUMBER
+              });
+            const targetBranch = pr.data.head.ref;
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'chromatic.yml',
+              ref: targetBranch
+            });
